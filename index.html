@@ -1,0 +1,1175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organizador de Relatório de Pronta Entrega</title>
+    <style>
+        /* Reset e variáveis */
+        :root {
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            --color-bg: #ffffff;
+            --color-text: #1d1d1f;
+            --color-text-secondary: #86868b;
+            --color-accent: #0071e3;
+            --color-accent-hover: #0077ed;
+            --color-border: #d2d2d7;
+            --color-bg-secondary: #f5f5f7;
+            --color-success: #34c759;
+            --color-error: #ff3b30;
+            --spacing-xs: 8px;
+            --spacing-sm: 16px;
+            --spacing-md: 24px;
+            --spacing-lg: 32px;
+            --spacing-xl: 48px;
+            --radius-sm: 8px;
+            --radius-md: 12px;
+            --shadow-sm: 0 2px 6px rgba(0,0,0,0.08);
+            --shadow-md: 0 4px 12px rgba(0,0,0,0.12);
+            --transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Base */
+        body {
+            background-color: var(--color-bg);
+            color: var(--color-text);
+            font-family: var(--font-sans);
+            font-size: 15px;
+            line-height: 1.5;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+            padding: var(--spacing-md);
+        }
+        
+        h1, h2, h3 {
+            font-weight: 600;
+            letter-spacing: -0.015em;
+        }
+        
+        h1 {
+            font-size: 32px;
+            margin-bottom: var(--spacing-md);
+            text-align: center;
+        }
+        
+        h2 {
+            font-size: 24px;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        h3 {
+            font-size: 18px;
+            margin-bottom: var(--spacing-xs);
+        }
+        
+        /* Layout */
+        .container {
+            max-width: 1100px;
+            margin: 0 auto;
+        }
+        
+        .card {
+            background-color: var(--color-bg);
+            border-radius: var(--radius-md);
+            padding: var(--spacing-md);
+            margin-bottom: var(--spacing-md);
+            box-shadow: var(--shadow-sm);
+            transition: var(--transition);
+        }
+        
+        .card:hover {
+            box-shadow: var(--shadow-md);
+        }
+        
+        .section {
+            margin-bottom: var(--spacing-xl);
+        }
+        
+        /* Formulários */
+        .form-group {
+            margin-bottom: var(--spacing-md);
+        }
+        
+        label {
+            display: block;
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+        }
+        
+        input[type="text"], 
+        input[type="number"] {
+            width: 100%;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-family: var(--font-sans);
+            font-size: 15px;
+            transition: var(--transition);
+        }
+        
+        input[type="text"]:focus, 
+        input[type="number"]:focus {
+            outline: none;
+            border-color: var(--color-accent);
+            box-shadow: 0 0 0 2px rgba(0,113,227,0.2);
+        }
+        
+        /* Botões */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 120px;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-sm);
+            border: none;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .btn-primary {
+            background-color: var(--color-accent);
+            color: white;
+        }
+        
+        .btn-primary:hover:not(:disabled) {
+            background-color: var(--color-accent-hover);
+        }
+        
+        .btn-secondary {
+            background-color: var(--color-bg-secondary);
+            color: var(--color-text);
+        }
+        
+        .btn-secondary:hover:not(:disabled) {
+            background-color: var(--color-border);
+        }
+        
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* Configurações especiais */
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border: 2px dashed var(--color-border);
+            border-radius: var(--radius-md);
+            margin-bottom: var(--spacing-md);
+            transition: var(--transition);
+        }
+        
+        .file-upload:hover {
+            border-color: var(--color-accent);
+        }
+        
+        .file-upload-icon {
+            font-size: 36px;
+            margin-bottom: var(--spacing-sm);
+            color: var(--color-accent);
+        }
+        
+        .file-upload-text {
+            margin-bottom: var(--spacing-xs);
+            font-weight: 500;
+        }
+        
+        .file-upload-subtext {
+            color: var(--color-text-secondary);
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        /* Tabelas de resultado */
+        .model-section {
+            margin-bottom: var(--spacing-md);
+            background-color: var(--color-bg);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .model-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background-color: var(--color-bg-secondary);
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .model-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .model-data {
+            padding: 0;
+        }
+        
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        .data-table th, 
+        .data-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid var(--color-border);
+        }
+        
+        .data-table th {
+            font-weight: 500;
+            color: white;
+            background-color: var(--color-accent);
+            position: sticky;
+            top: 0;
+            z-index: 1;
+        }
+        
+        .data-table th:first-child {
+            width: 50%;
+        }
+        
+        .data-table th:nth-child(2) {
+            width: 25%;
+        }
+        
+        .data-table th:last-child {
+            width: 25%;
+        }
+        
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+        
+        .data-table tr:hover td {
+            background-color: var(--color-bg-secondary);
+        }
+        
+        /* Notificações e alertas */
+        .notification {
+            position: fixed;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-sm);
+            background-color: var(--color-success);
+            color: white;
+            box-shadow: var(--shadow-md);
+            transform: translateY(-100px);
+            opacity: 0;
+            transition: all 0.3s ease-in-out;
+            z-index: 100;
+        }
+        
+        .notification.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+        
+        /* Loading spinner */
+        .loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: var(--spacing-xl);
+        }
+        
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 3px solid rgba(0,113,227,0.2);
+            border-radius: 50%;
+            border-top-color: var(--color-accent);
+            animation: spin 1s linear infinite;
+            margin-bottom: var(--spacing-sm);
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            body {
+                padding: var(--spacing-sm);
+            }
+            
+            .card {
+                padding: var(--spacing-sm);
+            }
+            
+            .model-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .model-title {
+                margin-bottom: var(--spacing-xs);
+            }
+            
+            .data-table th, 
+            .data-table td {
+                padding: 6px 8px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Organizador de Relatório de Pronta Entrega</h1>
+        
+        <div class="section">
+            <div class="card">
+                <form id="uploadForm">
+                    <div class="file-upload" id="dropArea">
+                        <div class="file-upload-icon">📄</div>
+                        <div class="file-upload-text">Arraste seu arquivo ou clique para selecionar</div>
+                        <div class="file-upload-subtext">Formatos suportados: Excel (.xlsx, .xls) e OpenDocument (.ods)</div>
+                        <input type="file" id="fileInput" name="fileInput" accept=".xlsx,.xls,.ods" style="margin-bottom: 15px;" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="colDescricao">Índice da coluna de Descrição:</label>
+                        <input type="number" id="colDescricao" value="0" min="0" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="colQuantidade">Índice da coluna de Quantidade:</label>
+                        <input type="number" id="colQuantidade" value="1" min="0" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="colCor">Índice da coluna de Cor:</label>
+                        <input type="number" id="colCor" value="2" min="0" />
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Tratamento para o termo "RIBANA":</label>
+                        <div style="margin-top: 8px;">
+                            <select id="ribanaOption" class="form-select" style="width: 100%; padding: 8px; border-radius: 4px; border: 1px solid var(--color-border);">
+                                <option value="manter">Manter como RIBANA</option>
+                                <option value="punho" selected>Substituir por PUNHO</option>
+                                <option value="tira">Substituir por TIRA</option>
+                                <option value="peitilho">Substituir por PEITILHO</option>
+                                <option value="custom">Usar termo personalizado</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="customRibanaGroup" style="display: none;">
+                        <label for="customRibana">Termo personalizado:</label>
+                        <input type="text" id="customRibana" placeholder="Digite o termo para substituir RIBANA" />
+                    </div>
+                    
+                    <div class="form-group" style="text-align: center;">
+                        <button type="button" class="btn btn-primary" id="processButton" disabled>Processar Arquivo</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <div id="loadingDiv" class="loading" style="display: none;">
+            <div class="spinner"></div>
+            <div>Processando seu arquivo...</div>
+        </div>
+        
+        <div id="resultDiv" style="display: none;">
+            <h2>Resultados Processados</h2>
+            <div id="modelContainers"></div>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">Copiado com sucesso!</div>
+
+    <!-- SheetJS Library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- jsPDF Library via CDN -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.28/jspdf.plugin.autotable.min.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Elementos DOM
+            const fileInput = document.getElementById('fileInput');
+            const dropArea = document.getElementById('dropArea');
+            const processButton = document.getElementById('processButton');
+            const loadingDiv = document.getElementById('loadingDiv');
+            const resultDiv = document.getElementById('resultDiv');
+            const modelContainers = document.getElementById('modelContainers');
+            const notification = document.getElementById('notification');
+            const uploadForm = document.getElementById('uploadForm');
+            
+            // Elementos de configuração
+            const colDescricao = document.getElementById('colDescricao');
+            const colQuantidade = document.getElementById('colQuantidade');
+            const colCor = document.getElementById('colCor');
+            const ribanaOption = document.getElementById('ribanaOption');
+            const customRibanaGroup = document.getElementById('customRibanaGroup');
+            const customRibana = document.getElementById('customRibana');
+            
+            // Mostrar/ocultar campo personalizado quando a opção mudar
+            ribanaOption.addEventListener('change', function() {
+                if (ribanaOption.value === 'custom') {
+                    customRibanaGroup.style.display = 'block';
+                } else {
+                    customRibanaGroup.style.display = 'none';
+                }
+            });
+            
+            // Variáveis
+            let fileData = [];
+            let processedData = [];
+            let allModelGroups = {};
+            
+            // Verificar se o arquivo foi selecionado
+            fileInput.addEventListener('change', function(e) {
+                if (fileInput.files.length > 0) {
+                    processButton.disabled = false;
+                    const fileName = fileInput.files[0].name;
+                    document.querySelector('.file-upload-text').textContent = `Arquivo selecionado: ${fileName}`;
+                } else {
+                    processButton.disabled = true;
+                    document.querySelector('.file-upload-text').textContent = 'Arraste seu arquivo ou clique para selecionar';
+                }
+            });
+            
+            // Funcionalidade de arrastar e soltar
+            ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, preventDefaults, false);
+            });
+            
+            function preventDefaults(e) {
+                e.preventDefault();
+                e.stopPropagation();
+            }
+            
+            ['dragenter', 'dragover'].forEach(eventName => {
+                dropArea.addEventListener(eventName, highlight, false);
+            });
+            
+            ['dragleave', 'drop'].forEach(eventName => {
+                dropArea.addEventListener(eventName, unhighlight, false);
+            });
+            
+            function highlight() {
+                dropArea.style.borderColor = 'var(--color-accent)';
+                dropArea.style.backgroundColor = 'rgba(0,113,227,0.05)';
+            }
+            
+            function unhighlight() {
+                dropArea.style.borderColor = 'var(--color-border)';
+                dropArea.style.backgroundColor = 'var(--color-bg)';
+            }
+            
+            dropArea.addEventListener('drop', function(e) {
+                const dt = e.dataTransfer;
+                const files = dt.files;
+                
+                if (files.length > 0) {
+                    fileInput.files = files;
+                    processButton.disabled = false;
+                    const fileName = files[0].name;
+                    document.querySelector('.file-upload-text').textContent = `Arquivo selecionado: ${fileName}`;
+                }
+            });
+            
+            // Evitar que o formulário seja enviado ao pressionar Enter
+            uploadForm.addEventListener('submit', function(e) {
+                e.preventDefault();
+                return false;
+            });
+            
+            // Processamento do arquivo
+            processButton.addEventListener('click', processFile);
+            
+            function processFile() {
+                const file = fileInput.files[0];
+                if (!file) {
+                    alert('Por favor, selecione um arquivo.');
+                    return;
+                }
+                
+                loadingDiv.style.display = 'flex';
+                resultDiv.style.display = 'none';
+                modelContainers.innerHTML = '';
+                
+                const reader = new FileReader();
+                
+                reader.onload = function(e) {
+                    try {
+                        const data = e.target.result;
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        
+                        // Assume primeira planilha
+                        const worksheet = workbook.Sheets[workbook.SheetNames[0]];
+                        const jsonData = XLSX.utils.sheet_to_json(worksheet, { header: 1 });
+                        
+                        // Remover linhas vazias
+                        fileData = jsonData.filter(row => row.length > 0);
+                        
+                        // Processar os dados
+                        processData();
+                        
+                        // Mostrar resultados
+                        displayResults();
+                        
+                    } catch (error) {
+                        console.error('Erro ao processar arquivo:', error);
+                        alert('Erro ao processar o arquivo: ' + error.message);
+                    } finally {
+                        loadingDiv.style.display = 'none';
+                    }
+                };
+                
+                reader.onerror = function() {
+                    alert('Erro ao ler o arquivo.');
+                    loadingDiv.style.display = 'none';
+                };
+                
+                reader.readAsArrayBuffer(file);
+            }
+            
+            function isEmptyQuantity(value) {
+                // Se for undefined ou null
+                if (value === undefined || value === null) return true;
+                
+                // Se for string vazia ou apenas espaços
+                if (typeof value === 'string') {
+                    const trimmed = value.trim();
+                    if (trimmed === '' || trimmed === '0') return true;
+                }
+                
+                // Se for zero (como número)
+                if (value === 0) return true;
+                
+                // Se converter para número dá NaN, 0 ou negativo
+                const numValue = Number(value);
+                if (isNaN(numValue) || numValue <= 0) return true;
+                
+                // Se chegar aqui, a quantidade é válida
+                return false;
+            }
+            
+            function isEmptyRow(row, colunaDescricao, colunaQuantidade, colunaCor) {
+                // Verificar se a linha está completamente vazia ou só tem células vazias
+                if (!row || row.length === 0) return true;
+                
+                // Verificar se todas as células importantes estão vazias
+                const descricao = row[colunaDescricao];
+                const quantidade = row[colunaQuantidade];
+                const cor = row[colunaCor];
+                
+                // Se descrição estiver vazia, considerar linha vazia
+                if (!descricao || (typeof descricao === 'string' && descricao.trim() === '')) {
+                    return true;
+                }
+                
+                // Se quantidade estiver vazia, considerar linha vazia
+                if (isEmptyQuantity(quantidade)) {
+                    return true;
+                }
+                
+                return false;
+            }
+            
+            function processData() {
+                if (fileData.length === 0) return;
+                
+                try {
+                    // Índices das colunas
+                    const colunaDescricao = parseInt(colDescricao.value);
+                    const colunaQuantidade = parseInt(colQuantidade.value);
+                    const colunaCor = parseInt(colCor.value);
+                    
+                    // Determinar se há cabeçalho
+                    const startRow = fileData[0].some(cell => typeof cell === 'string' && (
+                        String(cell).toLowerCase().includes('descr') || 
+                        String(cell).toLowerCase().includes('quant') || 
+                        String(cell).toLowerCase().includes('cor')
+                    )) ? 1 : 0;
+                    
+                    processedData = [];
+                    
+                    // Log para depuração
+                    console.log('Processando dados das linhas ' + startRow + ' até ' + (fileData.length-1));
+                    console.log('Total de linhas brutas:', fileData.length);
+                    
+                    // Filtrar e limpar os dados primeiro (especialmente importante para Excel)
+                    const cleanedData = [];
+                    
+                    for (let i = startRow; i < fileData.length; i++) {
+                        const row = fileData[i];
+                        
+                        // Pular linhas completamente vazias usando nossa nova função
+                        if (isEmptyRow(row, colunaDescricao, colunaQuantidade, colunaCor)) {
+                            console.log(`Linha ${i}: Linha vazia detectada, pulando`);
+                            continue;
+                        }
+                        
+                        cleanedData.push({ originalIndex: i, row: row });
+                    }
+                    
+                    console.log('Linhas após limpeza:', cleanedData.length);
+                    
+                    // Agora processar apenas as linhas limpas
+                    cleanedData.forEach(({ originalIndex, row }) => {
+                        // Limpeza agressiva especificamente para Excel - remover quebras de linha e espaços extras
+                        const descricao = String(row[colunaDescricao] || '')
+                            .replace(/[\r\n\t]/g, ' ')  // Remover quebras de linha e tabs
+                            .replace(/\s+/g, ' ')       // Substituir múltiplos espaços por um só
+                            .trim();
+                        
+                        const quantidade = row[colunaQuantidade];
+                        
+                        const cor = String(row[colunaCor] || '')
+                            .replace(/[\r\n\t]/g, ' ')  // Remover quebras de linha e tabs
+                            .replace(/\s+/g, ' ')       // Substituir múltiplos espaços por um só
+                            .trim();
+                        
+                        // Log para depuração
+                        console.log(`Processando linha ${originalIndex}: "${descricao}" | Qtd: "${quantidade}" | Cor: "${cor}"`);
+                        
+                        // Dupla verificação de quantidade (extra rigoroso para Excel)
+                        if (isEmptyQuantity(quantidade)) {
+                            console.log(`Linha ${originalIndex}: Quantidade inválida após verificação rigorosa, pulando`);
+                            return; // continue do forEach
+                        }
+                        
+                        // Extrair produto (primeiro termo) e substituir RIBANA pelo termo escolhido
+                        let produto = descricao.split(' ')[0] || '';
+                        if (produto.toUpperCase() === 'RIBANA') {
+                            // Obter o termo de substituição conforme opção selecionada
+                            switch (ribanaOption.value) {
+                                case 'manter':
+                                    // Manter como está
+                                    break;
+                                case 'punho':
+                                    produto = 'PUNHO';
+                                    break;
+                                case 'tira':
+                                    produto = 'TIRA';
+                                    break;
+                                case 'peitilho':
+                                    produto = 'PEITILHO';
+                                    break;
+                                case 'custom':
+                                    const customValue = customRibana.value.trim();
+                                    if (customValue) {
+                                        produto = customValue.toUpperCase();
+                                    }
+                                    break;
+                            }
+                        }
+                        
+                        // Extrair tamanho (após TAM.)
+                        let tamanho = '';
+                        const tamRegex = /TAM\.([^\s]+)/;
+                        const tamMatch = descricao.match(tamRegex);
+                        if (tamMatch && tamMatch[1]) {
+                            tamanho = tamMatch[1];
+                        }
+                        
+                        // Extrair modelo (após MOD.)
+                        let modelo = '';
+                        const modRegex = /MOD\.(\d+)/;
+                        const modMatch = descricao.match(modRegex);
+                        if (modMatch && modMatch[1]) {
+                            modelo = modMatch[1];
+                        }
+                        
+                        // Construir descrição simplificada
+                        let descricaoSimplificada = '';
+                        
+                        if (produto) {
+                            descricaoSimplificada += produto;
+                        }
+                        
+                        if (tamanho) {
+                            descricaoSimplificada += ' ' + tamanho;
+                        }
+                        
+                        if (modelo) {
+                            descricaoSimplificada += ' / ' + modelo;
+                        }
+                        
+                        descricaoSimplificada = descricaoSimplificada.trim();
+                        
+                        // Só adicionar se tiver dados válidos
+                        if (descricaoSimplificada && !isEmptyQuantity(quantidade)) {
+                            // Limpar quantidade também (pode ter espaços ou caracteres estranhos)
+                            const quantidadeLimpa = String(quantidade).replace(/[\r\n\t\s]/g, '');
+                            
+                            processedData.push({
+                                descricaoSimplificada,
+                                produto,
+                                tamanho,
+                                modelo,
+                                quantidade: quantidadeLimpa,
+                                cor
+                            });
+                            console.log(`Linha ${originalIndex}: Adicionada com sucesso - ${descricaoSimplificada}`);
+                        } else {
+                            console.log(`Linha ${originalIndex}: Dados insuficientes, não adicionada`);
+                        }
+                    });
+                    
+                    // Log final
+                    console.log(`Total processado: ${processedData.length} linhas válidas de ${fileData.length} linhas originais`);
+                    
+                } catch (error) {
+                    console.error('Erro ao processar dados:', error);
+                    alert('Erro ao processar dados: ' + error.message);
+                }
+            }
+            
+            function displayResults() {
+                if (processedData.length === 0) {
+                    resultDiv.innerHTML = '<div class="card"><p>Nenhum resultado encontrado ou todas as linhas possuem quantidade vazia.</p></div>';
+                    resultDiv.style.display = 'block';
+                    return;
+                }
+                
+                // Agrupar por modelo
+                allModelGroups = {};
+                
+                processedData.forEach(item => {
+                    if (!allModelGroups[item.modelo]) {
+                        allModelGroups[item.modelo] = [];
+                    }
+                    allModelGroups[item.modelo].push(item);
+                });
+                
+                // Ordenar os itens de cada modelo por cor
+                Object.keys(allModelGroups).forEach(modelo => {
+                    allModelGroups[modelo].sort((a, b) => {
+                        return a.cor.localeCompare(b.cor);
+                    });
+                });
+                
+                // Limpar o container de modelos
+                modelContainers.innerHTML = '';
+                
+                // Criar seções para cada modelo
+                Object.keys(allModelGroups).sort().forEach(modelo => {
+                    const items = allModelGroups[modelo];
+                    
+                    const modelSection = document.createElement('div');
+                    modelSection.className = 'model-section';
+                    modelSection.style.marginBottom = 'var(--spacing-md)';
+                    
+                    const modelHeader = document.createElement('div');
+                    modelHeader.className = 'model-header';
+                    
+                    const modelTitle = document.createElement('h3');
+                    modelTitle.className = 'model-title';
+                    modelTitle.textContent = `MODELO ${modelo}`;
+                    
+                    const buttonGroup = document.createElement('div');
+                    buttonGroup.style.display = 'flex';
+                    buttonGroup.style.gap = 'var(--spacing-xs)';
+                    
+                    const copyButton = document.createElement('button');
+                    copyButton.className = 'btn btn-primary';
+                    copyButton.textContent = 'Copiar';
+                    copyButton.addEventListener('click', function() {
+                        copyModelData(modelo, items);
+                    });
+                    
+                    const pdfButton = document.createElement('button');
+                    pdfButton.className = 'btn btn-secondary';
+                    pdfButton.textContent = 'Exportar PDF';
+                    pdfButton.addEventListener('click', function() {
+                        exportModelToPDF(modelo, items);
+                    });
+                    
+                    buttonGroup.appendChild(copyButton);
+                    buttonGroup.appendChild(pdfButton);
+                    
+                    modelHeader.appendChild(modelTitle);
+                    modelHeader.appendChild(buttonGroup);
+                    
+                    const modelData = document.createElement('div');
+                    modelData.className = 'model-data';
+                    
+                    const table = document.createElement('table');
+                    table.className = 'data-table';
+                    table.id = `table-model-${modelo}`;
+                    
+                    // Cabeçalho da tabela
+                    const thead = document.createElement('thead');
+                    const headerRow = document.createElement('tr');
+                    
+                    const headers = ['Descrição', 'Quantidade', 'Cor'];
+                    headers.forEach(headerText => {
+                        const th = document.createElement('th');
+                        th.textContent = headerText;
+                        headerRow.appendChild(th);
+                    });
+                    
+                    thead.appendChild(headerRow);
+                    table.appendChild(thead);
+                    
+                    // Corpo da tabela
+                    const tbody = document.createElement('tbody');
+                    
+                    items.forEach(item => {
+                        const row = document.createElement('tr');
+                        
+                        const descCell = document.createElement('td');
+                        descCell.textContent = item.descricaoSimplificada;
+                        row.appendChild(descCell);
+                        
+                        const qtdCell = document.createElement('td');
+                        qtdCell.textContent = item.quantidade;
+                        row.appendChild(qtdCell);
+                        
+                        const corCell = document.createElement('td');
+                        corCell.textContent = item.cor;
+                        row.appendChild(corCell);
+                        
+                        tbody.appendChild(row);
+                    });
+                    
+                    table.appendChild(tbody);
+                    modelData.appendChild(table);
+                    
+                    modelSection.appendChild(modelHeader);
+                    modelSection.appendChild(modelData);
+                    
+                    modelContainers.appendChild(modelSection);
+                });
+                
+                // Adicionar botão para exportar todos os modelos
+                if (Object.keys(allModelGroups).length > 0) {
+                    const exportAllSection = document.createElement('div');
+                    exportAllSection.style.textAlign = 'center';
+                    exportAllSection.style.marginTop = 'var(--spacing-md)';
+                    
+                    const exportAllButton = document.createElement('button');
+                    exportAllButton.className = 'btn btn-primary';
+                    exportAllButton.style.padding = 'var(--spacing-sm) var(--spacing-md)';
+                    exportAllButton.style.fontSize = '16px';
+                    exportAllButton.textContent = 'Exportar todos os modelos em PDF';
+                    exportAllButton.addEventListener('click', exportAllModelsToPDF);
+                    
+                    exportAllSection.appendChild(exportAllButton);
+                    modelContainers.appendChild(exportAllSection);
+                }
+                
+                resultDiv.style.display = 'block';
+            }
+            
+            function copyModelData(modelo, items) {
+                if (items.length === 0) return;
+                
+                let text = 'Descrição\tQuantidade\tCor\n';
+                
+                // Adicionar dados
+                items.forEach(item => {
+                    text += `${item.descricaoSimplificada}\t${item.quantidade}\t${item.cor}\n`;
+                });
+                
+                // Copiar para a área de transferência
+                try {
+                    navigator.clipboard.writeText(text)
+                        .then(function() {
+                            showNotification('Copiado com sucesso!');
+                        })
+                        .catch(function(err) {
+                            console.error('Erro ao copiar texto: ', err);
+                            fallbackCopyTextToClipboard(text);
+                        });
+                } catch (e) {
+                    fallbackCopyTextToClipboard(text);
+                }
+            }
+            
+            // Método alternativo para copiar texto
+            function fallbackCopyTextToClipboard(text) {
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                
+                // Tornar o textarea invisível
+                textArea.style.position = 'fixed';
+                textArea.style.top = '0';
+                textArea.style.left = '0';
+                textArea.style.width = '2em';
+                textArea.style.height = '2em';
+                textArea.style.padding = '0';
+                textArea.style.border = 'none';
+                textArea.style.outline = 'none';
+                textArea.style.boxShadow = 'none';
+                textArea.style.background = 'transparent';
+                
+                document.body.appendChild(textArea);
+                textArea.focus();
+                textArea.select();
+                
+                try {
+                    const successful = document.execCommand('copy');
+                    if (successful) {
+                        showNotification('Copiado com sucesso!');
+                    } else {
+                        showNotification('Não foi possível copiar. Selecione a tabela manualmente.', true);
+                    }
+                } catch (err) {
+                    console.error('Erro ao copiar texto: ', err);
+                    showNotification('Erro ao copiar. Selecione a tabela manualmente.', true);
+                }
+                
+                document.body.removeChild(textArea);
+            }
+            
+            function exportModelToPDF(modelo, items) {
+                if (items.length === 0) return;
+                
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    // Título mais destacado
+                    doc.setFillColor(0, 113, 227);
+                    doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(16);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text(`MODELO ${modelo}`, doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                    
+                    // Tabela com espaçamento muito compacto
+                    const tableData = [];
+                    
+                    // Adicionar dados
+                    items.forEach(item => {
+                        tableData.push([
+                            item.descricaoSimplificada,
+                            item.quantidade.toString(),
+                            item.cor
+                        ]);
+                    });
+                    
+                    // Configurar larguras de coluna específicas
+                    const columnStyles = {
+                        0: { cellWidth: 95 },   // Descrição
+                        1: { cellWidth: 37 },   // Quantidade
+                        2: { cellWidth: 58 }    // Cor
+                    };
+                    
+                    doc.autoTable({
+                        head: [['Descrição', 'Quantidade', 'Cor']],
+                        body: tableData,
+                        startY: 25,  // Posicionamento abaixo do título
+                        columnStyles: columnStyles,
+                        styles: {
+                            fontSize: 10,       // AQUI: mude de 7 para 10
+                            cellPadding: 0.8,   // Padding muito menor
+                            lineColor: [200, 200, 200],
+                            lineWidth: 0.05,
+                            minCellHeight: 3.5, // Altura mínima muito reduzida
+                            halign: 'left',
+                            valign: 'middle'
+                        },
+                        headStyles: {
+                            fillColor: [0, 113, 227],
+                            textColor: [255, 255, 255],
+                            fontStyle: 'bold',
+                            halign: 'center',
+                            fontSize: 11,       // AQUI: mude de 8 para 11 (cabeçalho um pouco maior)
+                            cellPadding: 1,
+                            minCellHeight: 4
+                        },
+                        bodyStyles: {
+                            valign: 'middle',
+                            cellPadding: 0.8
+                        },
+                        margin: { top: 25, bottom: 8, left: 10, right: 10 },
+                        theme: 'grid',
+                        rowPageBreak: 'avoid',
+                        showHead: 'everyPage',
+                        tableLineWidth: 0.05,
+                        tableLineColor: [200, 200, 200]
+                    });
+                    
+                    // Adicionar rodapé
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(7);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(
+                            'Página ' + i + ' de ' + pageCount,
+                            doc.internal.pageSize.width / 2,
+                            doc.internal.pageSize.height - 8,
+                            { align: 'center' }
+                        );
+                    }
+                    
+                    // Salvar o PDF
+                    doc.save(`modelo_${modelo}_produtos.pdf`);
+                    showNotification('PDF exportado com sucesso!');
+                    
+                } catch (error) {
+                    console.error('Erro ao exportar PDF:', error);
+                    alert('Erro ao exportar PDF: ' + error.message);
+                }
+            }
+            
+            function exportAllModelsToPDF() {
+                try {
+                    const { jsPDF } = window.jspdf;
+                    const doc = new jsPDF();
+                    
+                    // Primeira página com índice (capa) - mais compacta
+                    doc.setFillColor(0, 113, 227);
+                    doc.rect(0, 0, doc.internal.pageSize.width, 30, 'F');
+                    doc.setTextColor(255, 255, 255);
+                    doc.setFontSize(18);
+                    doc.setFont('helvetica', 'bold');
+                    doc.text("CATÁLOGO DE PRODUTOS", doc.internal.pageSize.width / 2, 20, { align: 'center' });
+                    
+                    doc.setTextColor(0, 0, 0);
+                    doc.setFontSize(12);
+                    doc.text("Índice de Modelos", 15, 40);
+                    
+                    const models = Object.keys(allModelGroups).sort();
+                    let yPos = 48;
+                    
+                    models.forEach((modelo, index) => {
+                        doc.setFontSize(10);
+                        doc.text(`Modelo ${modelo}`, 20, yPos);
+                        doc.setFontSize(9);
+                        doc.text(`Página ${index + 2}`, 150, yPos);
+                        yPos += 8;  // Espaçamento menor
+                        
+                        // Nova página se lista ficar muito longa
+                        if (yPos > 270 && index < models.length - 1) {
+                            doc.addPage();
+                            yPos = 20;
+                        }
+                    });
+                    
+                    // Configurar larguras de coluna específicas para catálogo completo
+                    const columnStyles = {
+                        0: { cellWidth: 95 },   // Descrição
+                        1: { cellWidth: 37 },   // Quantidade
+                        2: { cellWidth: 58 }    // Cor
+                    };
+                    
+                    // Adicionar páginas para cada modelo
+                    models.forEach((modelo) => {
+                        const items = allModelGroups[modelo];
+                        
+                        // Adicionar nova página
+                        doc.addPage();
+                        
+                        // Título do modelo - mais compacto
+                        doc.setFillColor(0, 113, 227);
+                        doc.rect(0, 0, doc.internal.pageSize.width, 20, 'F');
+                        doc.setTextColor(255, 255, 255);
+                        doc.setFontSize(16);
+                        doc.setFont('helvetica', 'bold');
+                        doc.text(`MODELO ${modelo}`, doc.internal.pageSize.width / 2, 13, { align: 'center' });
+                        
+                        // Tabela
+                        const tableData = [];
+                        
+                        // Adicionar dados
+                        items.forEach(item => {
+                            tableData.push([
+                                item.descricaoSimplificada,
+                                item.quantidade.toString(),
+                                item.cor
+                            ]);
+                        });
+                        
+                        // Adicionar tabela com configurações ultra compactas
+                        doc.autoTable({
+                            head: [['Descrição', 'Quantidade', 'Cor']],
+                            body: tableData,
+                            startY: 25,
+                            columnStyles: columnStyles,
+                            styles: {
+                                fontSize: 10,       // AQUI: mude de 7 para 10
+                                cellPadding: 0.8,   // Padding muito menor
+                                lineColor: [200, 200, 200],
+                                lineWidth: 0.05,
+                                minCellHeight: 3.5, // Altura mínima muito reduzida
+                                halign: 'left',
+                                valign: 'middle'
+                            },
+                            headStyles: {
+                                fillColor: [0, 113, 227],
+                                textColor: [255, 255, 255],
+                                fontStyle: 'bold',
+                                halign: 'center',
+                                fontSize: 11,       // AQUI: mude de 8 para 11 (cabeçalho um pouco maior)
+                                cellPadding: 1,
+                                minCellHeight: 4
+                            },
+                            bodyStyles: {
+                                valign: 'middle',
+                                cellPadding: 0.8
+                            },
+                            margin: { top: 25, bottom: 8, left: 10, right: 10 },
+                            theme: 'grid',
+                            rowPageBreak: 'avoid',
+                            showHead: 'everyPage',
+                            tableLineWidth: 0.05,
+                            tableLineColor: [200, 200, 200]
+                        });
+                    });
+                    
+                    // Adicionar rodapé com números de página
+                    const pageCount = doc.internal.getNumberOfPages();
+                    for (let i = 1; i <= pageCount; i++) {
+                        doc.setPage(i);
+                        doc.setFontSize(7);
+                        doc.setTextColor(100, 100, 100);
+                        doc.text(
+                            'Página ' + i + ' de ' + pageCount,
+                            doc.internal.pageSize.width / 2,
+                            doc.internal.pageSize.height - 8,
+                            { align: 'center' }
+                        );
+                    }
+                    
+                    // Salvar o PDF
+                    doc.save('catalogo_completo_produtos.pdf');
+                    showNotification('Catálogo completo exportado com sucesso!');
+                    
+                } catch (error) {
+                    console.error('Erro ao exportar PDF:', error);
+                    alert('Erro ao exportar PDF: ' + error.message);
+                }
+            }
+            
+            function showNotification(message, isError = false) {
+                notification.textContent = message;
+                notification.style.backgroundColor = isError ? 'var(--color-error)' : 'var(--color-success)';
+                notification.classList.add('show');
+                
+                setTimeout(function() {
+                    notification.classList.remove('show');
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>
